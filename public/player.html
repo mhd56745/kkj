@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: white;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        video {
+            width: 100%;
+            max-height: 80vh;
+            background: #111;
+            border-radius: 10px;
+        }
+        
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .back-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Video Player</h1>
+            <p>Streaming via Vercel Proxy</p>
+        </header>
+        
+        <video id="videoPlayer" controls></video>
+        
+        <div class="info">
+            <p>🔗 Stream URL: <span id="streamUrl"></span></p>
+            <p>📱 Compatible with all modern browsers</p>
+        </div>
+        
+        <button class="back-btn" onclick="window.location.href='/'">← Back to Home</button>
+    </div>
+    
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const streamUrl = window.location.origin + '/api/stream';
+        
+        // Display URL
+        document.getElementById('streamUrl').textContent = streamUrl;
+        
+        // Initialize player
+        const player = dashjs.MediaPlayer().create();
+        player.initialize(video, streamUrl, true);
+        
+        // Setup DRM
+        player.setProtectionData({
+            'org.w3.clearkey': {
+                'serverURL': window.location.origin + '/api/license'
+            }
+        });
+        
+        // Event listeners
+        player.on('playbackPlaying', () => {
+            console.log('✅ Playback started');
+        });
+        
+        player.on('error', (e) => {
+            console.error('❌ Player error:', e);
+        });
+    </script>
+</body>
+</html>
