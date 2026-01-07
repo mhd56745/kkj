@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مشغل فيديو آمن</title>
+    <title>Video Proxy - Vercel</title>
     <style>
         * {
             margin: 0;
@@ -14,21 +14,21 @@
         
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
+            color: white;
             min-height: 100vh;
             padding: 20px;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 40px;
+            padding: 30px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             backdrop-filter: blur(10px);
@@ -37,97 +37,76 @@
         
         h1 {
             color: #4cc9f0;
-            margin-bottom: 10px;
             font-size: 2.5em;
+            margin-bottom: 10px;
         }
         
         .subtitle {
             color: #b0b0b0;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
         
-        .player-container {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
-        #videoPlayer {
-            width: 100%;
-            height: 500px;
-            background: #000;
-        }
-        
-        .controls {
-            padding: 20px;
+        .link-card {
             background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
         
-        button {
+        .link-card:hover {
+            transform: translateY(-5px);
+            border-color: #4cc9f0;
+        }
+        
+        .link-card h3 {
+            color: #4cc9f0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .url-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            word-break: break-all;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: monospace;
+            color: #ddd;
+        }
+        
+        .btn {
             background: linear-gradient(45deg, #4361ee, #3a0ca3);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            width: 100%;
         }
         
-        button:hover {
+        .btn:hover {
+            background: linear-gradient(45deg, #3a0ca3, #4361ee);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
         }
         
-        button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .status {
-            padding: 15px;
+        .instructions {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-        }
-        
-        .status.active {
-            display: block;
-            border-right: 5px solid #4cc9f0;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .info-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .label {
-            color: #4cc9f0;
-            font-weight: bold;
-        }
-        
-        .value {
-            color: #fff;
-            word-break: break-all;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
         }
         
         footer {
@@ -136,204 +115,77 @@
             color: #888;
             font-size: 0.9em;
         }
-        
-        @media (max-width: 768px) {
-            #videoPlayer {
-                height: 300px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎬 مشغل فيديو آمن</h1>
-            <p class="subtitle">مشغّل محمي باستخدام تقنية DRM عبر Vercel</p>
+            <h1>🚀 Video Proxy on Vercel</h1>
+            <p class="subtitle">Share video without sharing keys - Just send the link</p>
         </header>
         
-        <div class="player-container">
-            <video id="videoPlayer" controls crossorigin="anonymous">
-                المتصفح الخاص بك لا يدعم تشغيل الفيديو.
-            </video>
-        </div>
-        
-        <div class="controls">
-            <button id="playBtn" onclick="playVideo()">
-                <span>▶️</span> تشغيل الفيديو
-            </button>
-            <button id="stopBtn" onclick="stopVideo()" disabled>
-                <span>⏹️</span> إيقاف
-            </button>
-            <button id="infoBtn" onclick="toggleInfo()">
-                <span>ℹ️</span> معلومات التشغيل
-            </button>
-        </div>
-        
-        <div id="statusPanel" class="status">
-            <h3>📊 حالة التشغيل:</h3>
-            <div class="info-grid" id="infoGrid">
-                <!-- سيتم ملؤه ديناميكياً -->
+        <div class="links-grid">
+            <div class="link-card">
+                <h3><span>📺</span> DASH Stream Link</h3>
+                <div class="url-box" id="dashUrl">Loading...</div>
+                <p>Use in any DASH player</p>
+                <button class="btn" onclick="copyLink('dashUrl')">Copy Link</button>
+            </div>
+            
+            <div class="link-card">
+                <h3><span>📱</span> HLS Stream Link</h3>
+                <div class="url-box" id="hlsUrl">Loading...</div>
+                <p>Use in VLC or MX Player</p>
+                <button class="btn" onclick="copyLink('hlsUrl')">Copy Link</button>
+            </div>
+            
+            <div class="link-card">
+                <h3><span>🎬</span> Web Player</h3>
+                <div class="url-box" id="playerUrl">Loading...</div>
+                <p>Open in browser</p>
+                <button class="btn" onclick="copyLink('playerUrl')">Copy Link</button>
             </div>
         </div>
         
+        <div class="instructions">
+            <h3>📋 How to Use:</h3>
+            <p>1. Copy one of the links above</p>
+            <p>2. Send it to anyone</p>
+            <p>3. They can open it directly in their video player</p>
+            <p>4. No keys or codes needed</p>
+        </div>
+        
         <footer>
-            <p>🔒 المحتوى محمي باستخدام تقنية DRM • مستضاف على Vercel</p>
-            <p>⚠️ هذا مشروع تجريبي لأغراض التعليم فقط</p>
+            <p>🔒 Keys protected on server | ⚡ Hosted on Vercel</p>
         </footer>
     </div>
-
-    <!-- مكتبة dash.js -->
-    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
     
     <script>
-        let player = null;
-        let isPlaying = false;
+        // Get current URL
         const baseUrl = window.location.origin;
         
-        // تهيئة المشغل
-        function initPlayer() {
-            if (player) return;
-            
-            player = dashjs.MediaPlayer().create();
-            const video = document.getElementById('videoPlayer');
-            
-            // MPD URL معدل
-            const mpdUrl = `${baseUrl}/api/manifest`;
-            
-            player.initialize(video, mpdUrl, false);
-            
-            // إعداد DRM
-            player.setProtectionData({
-                'org.w3.clearkey': {
-                    'serverURL': `${baseUrl}/api/license`
-                }
-            });
-            
-            // مستمعات الأحداث
-            player.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
-                console.log('✅ Stream initialized successfully');
-                updateStatus('connected', 'الاتصال ناجح');
-            });
-            
-            player.on(dashjs.MediaPlayer.events.ERROR, (e) => {
-                console.error('❌ Player error:', e);
-                updateStatus('error', `خطأ: ${e.error?.message || 'Unknown'}`);
-            });
-            
-            player.on(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, () => {
-                isPlaying = true;
-                document.getElementById('stopBtn').disabled = false;
-                document.getElementById('playBtn').disabled = true;
-                updateStatus('playing', 'جاري التشغيل...');
-            });
-            
-            player.on(dashjs.MediaPlayer.events.PLAYBACK_PAUSED, () => {
-                isPlaying = false;
-                document.getElementById('playBtn').disabled = false;
-                updateStatus('paused', 'متوقف مؤقتاً');
-            });
-            
-            console.log('🎬 Player initialized with URL:', mpdUrl);
-            updateStatus('ready', 'جاهز للتشغيل');
-        }
+        // Update URLs
+        document.getElementById('dashUrl').textContent = baseUrl + '/api/stream';
+        document.getElementById('hlsUrl').textContent = baseUrl + '/api/hls';
+        document.getElementById('playerUrl').textContent = baseUrl + '/player.html';
         
-        // تشغيل الفيديو
-        function playVideo() {
-            if (!player) {
-                initPlayer();
-            }
-            const video = document.getElementById('videoPlayer');
-            video.play().catch(e => console.error('Play error:', e));
-        }
-        
-        // إيقاف الفيديو
-        function stopVideo() {
-            if (player) {
-                const video = document.getElementById('videoPlayer');
-                video.pause();
-                video.currentTime = 0;
-                isPlaying = false;
-                document.getElementById('playBtn').disabled = false;
-                document.getElementById('stopBtn').disabled = true;
-                updateStatus('stopped', 'متوقف');
-            }
-        }
-        
-        // تبديل معلومات التشغيل
-        function toggleInfo() {
-            const panel = document.getElementById('statusPanel');
-            panel.classList.toggle('active');
+        // Copy function
+        function copyLink(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
             
-            if (panel.classList.contains('active')) {
-                updateInfoGrid();
-            }
-        }
-        
-        // تحديث الحالة
-        function updateStatus(type, message) {
-            console.log(`📡 Status: ${type} - ${message}`);
-            
-            const infoGrid = document.getElementById('infoGrid');
-            if (!infoGrid) return;
-            
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('ar-SA');
-            
-            const statusHTML = `
-                <div class="info-item">
-                    <div class="label">الحالة:</div>
-                    <div class="value">${message}</div>
-                </div>
-                <div class="info-item">
-                    <div class="label">الوقت:</div>
-                    <div class="value">${timeStr}</div>
-                </div>
-                <div class="info-item">
-                    <div class="label">النطاق:</div>
-                    <div class="value">${baseUrl}</div>
-                </div>
-                <div class="info-item">
-                    <div class="label">التشغيل:</div>
-                    <div class="value">${isPlaying ? 'نشط' : 'متوقف'}</div>
-                </div>
-            `;
-            
-            infoGrid.innerHTML = statusHTML;
-        }
-        
-        // تحديث معلومات الشبكة
-        function updateInfoGrid() {
-            if (!player) return;
-            
-            const manifest = player.getDashAdapter()?.getManifest();
-            const infoGrid = document.getElementById('infoGrid');
-            
-            if (manifest) {
-                const bitrates = manifest.Representation_asArray?.map(rep => rep.bandwidth) || [];
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = element.nextElementSibling.nextElementSibling;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#10b981';
                 
-                infoGrid.innerHTML += `
-                    <div class="info-item">
-                        <div class="label">معدل البت:</div>
-                        <div class="value">${bitrates.map(b => Math.round(b/1000) + 'kbps').join(', ')}</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="label">المدة:</div>
-                        <div class="value">${manifest.mediaPresentationDuration ? 
-                            Math.round(manifest.mediaPresentationDuration) + ' ثانية' : 'غير معروف'}</div>
-                    </div>
-                `;
-            }
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #4361ee, #3a0ca3)';
+                }, 2000);
+            });
         }
-        
-        // التهيئة التلقائية عند تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Page loaded, initializing...');
-            initPlayer();
-        });
     </script>
 </body>
 </html>
